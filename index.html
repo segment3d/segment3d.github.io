@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Segment3D: Learning Fine-Grained Class-Agnostic 3D Segmentation without Manual Labels">
+  <meta name="keywords" content="Segment3D, fine-grained segmentation, class-agnostic segmentation, 3D segmentation, point cloud segmentation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Segment3D: Learning Fine-Grained Class-Agnostic 3D Segmentation without Manual Labels</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script> -->
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <!-- <link rel="icon" href="./static/images/favicon.svg"> -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<!-- <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://keunhong.com">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            HyperNeRF
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Nerfies
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+ -->
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Segment3D</h1>
+          <!-- <h1 class="title is-3 publication-title">Learning <span style="color: rgb(38, 195, 38);">Fine-Grained</span> <span style="color: rgb(0, 140, 255);">Class-Agnostic</span> 3D Segmentation<br>without Manual Labels</h1> -->
+          <h1 class="title is-3 publication-title">Learning Fine-Grained Class-Agnostic 3D Segmentation<br>without Manual Labels</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=ieN4b1QAAAAJ&hl=zh-CN&oi=sra">Rui Huang</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://pengsongyou.github.io">Songyou Peng</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://aycatakmaz.github.io">Ayça Takmaz</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://federicotombari.github.io/">Federico Tombari</a><sup>3</sup>,
+            </span>
+            <br>
+            <span class="author-block">
+              <a href="https://people.inf.ethz.ch/pomarc/">Marc Pollefeys</a><sup>2,4</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=rw6vWdcAAAAJ&hl=zh-CN">Shiji Song</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.gaohuang.net/">Gao Huang</a><sup>1*</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://francisengelmann.github.io/">Francis Engelmann</a><sup>2,3</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Tsinghua University,</span>
+            <span class="author-block"><sup>2</sup>ETH Zurich,</span>
+            <span class="author-block"><sup>3</sup>Google,</span>
+            <span class="author-block"><sup>4</sup>Microsoft</span>
+          </div>
+          <div class="is-size-6 publication-authors">
+            <sup>*</sup>Corresponding author
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <!-- <span class="link-block">
+                <a href="https://arxiv.org/pdf/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span> -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <!-- <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a> -->
+                  <a href=""
+                   class="external-link button is-normal is-rounded is-dark" disabled="">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <!-- <span class="link-block">
+                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container is-max-desktop">
+      <img src="./static/images/teaser.jpeg"
+                  class="teaser-fig"
+                  alt="teaser-fig."/>
+      <h2 class="has-text-justified">
+      Segment3D predicts highly accurate segmentation masks (right), 
+      improves over state-of-the-art 3D segmentation methods (e.g., Mask3D, left), and does not require manually labeled 3D training data.
+      This is achieved through the automatic generation of high-quality training masks using foundation models for image segmentation.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<!-- 
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-steve">
+          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/steve.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-chair-tp">
+          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/chair-tp.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-shiba">
+          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/shiba.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-fullbody">
+          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/fullbody.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-blueshirt">
+          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/blueshirt.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-mask">
+          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/mask.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-coffee">
+          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/coffee.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-toby">
+          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/toby2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            In this work, we aim to build a method for class-agnostic 3D scene segmentation.
+            Current 3D scene segmentation methods largely rely on manually annotated 3D training datasets. 
+            This manual annotation process is labor intensive, often does not include fine details, and the models trained on it typically do not generalize well to new domains.
+            Instead, we explore the use of image segmentation foundation models to automatically generate training labels for 3D segmentation.
+            The resulting model, Segment3D, produces high-quality 3D segmentation masks,
+            improves over existing 3D segmentation models (especially on fine-grained masks), and new training data can be easily added which further boosts the segmentation performance - all without the need for manual data labeling.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <!-- <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div> -->
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-3">Methodology</h2>
+        <img src="./static/images/framework.png"
+                  class="teaser-fig"
+                  alt="teaser-fig."/>
+        <div class="content has-text-justified">
+          <p>
+            Training Segment3D involves two stages:
+    The first stage (left) relies on largely available RGB-D image sequences and SAM, 
+    a pre-trained foundation model for 2D image segmentation.
+    Segment3D is pre-trained on partial RGB-D point clouds and supervised with pseudo ground-truth masks from SAM projected to 3D.
+    Due to the domain gap between partial and full point clouds, in the second stage (right), 
+    Segment3D is fine-tuned with confident masks predicted by the pre-trained Segment3D.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Exp. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-3">Results</h2>
+        <h3 class="title is-4">Class-Agnostic Segmentation</h3>
+        <img src="./static/images/fig1.jpeg"
+                  class="teaser-fig"
+                  alt="teaser-fig."/>
+        <div class="content has-text-justified">
+          <p>
+          Qualitative Results on ScanNet++ Val Set.
+    From top to bottom, we show the colored input 3D scenes, 
+    the segmentation masks predicted by SAM3D,
+    Mask3D, our Segment3D and the ground truth 3D mask annotations.
+          </p>
+        </div>
+
+        <h3 class="title is-4">Open-Set Scene Understanding</h3>
+        <img src="./static/images/openmask3d.png"
+                  class="teaser-fig"
+                  alt="teaser-fig."/>
+        <div class="content has-text-justified">
+          <p>
+            Qualitative Results of Adapted OpenMask3D.
+            Given a text prompt (bottom), 
+            OpenMask3D finds the corresponding masks in a given 3D scene (top). 
+            We show the 3D scene reconstruction and an RGB image for better visualization (top left corner).
+            The original OpenMask3D based on Mask3D, is unable to recognize the above queries, 
+            whether it is a relatively small object or a fine-grained affordance part of an object. 
+            In contrast, our Segment3D adaptation performs well in these cases.
+          </p>
+        </div>
+
+        <h3 class="title is-4">Zero-shot Test on Indoor In-the-Wild Scenes</h3>
+        <img src="./static/images/wild.jpeg"
+                  class="teaser-fig"
+                  alt="teaser-fig."/>
+        <div class="content has-text-justified">
+          <p>
+          From top to bottom, we show the colored input 3D scenes,
+    the segmentation masks predicted by Mask3D and our Segment3D.
+    Segment3D, trained with unsupervised learning, 
+    demonstrates superior generalization compared to Mask3D, 
+    which is trained with fully supervised learning.
+          </p>
+        </div>
+
+        <h3 class="title is-4">Zero-shot Test on Outdoor Scenarios</h3>
+        <img src="./static/images/outdoor.png"
+                  class="teaser-fig"
+                  alt="teaser-fig."/>
+        <div class="content has-text-justified">
+          <p>
+            Segment3D also exhibits superior generalization performance compared to Mask3D on outdoor scenes.
+          </p>
+        </div>
+
+      </div>
+    </div>
+    <!--/ Exp. -->
+  </div>
+</section>
+
+
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <!-- <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/videos/nerfies_paper.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div> -->
+    <div class="columns is-centered">
+      <!-- <div class="column is-8"> -->
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            It borrows the source code of <a
+              href="https://nerfies.github.io/">this website</a>,
+              We sincerely thank <a
+              href="https://keunhong.com/">Keunhong Park</a> for developing and open-sourcing this template.
+          </p>
+        </div>
+      <!-- </div> -->
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

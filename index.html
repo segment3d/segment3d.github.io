@@ -275,10 +275,14 @@
           <p>
             In this work, we aim to build a method for class-agnostic 3D scene segmentation.
             Current 3D scene segmentation methods largely rely on manually annotated 3D training datasets. 
-            This manual annotation process is labor intensive, often does not include fine details, and the models trained on it typically do not generalize well to new domains.
-            Instead, we explore the use of image segmentation foundation models to automatically generate training labels for 3D segmentation.
+            This manual annotation process is labor intensive, often does not include fine details, 
+            and the models trained on it typically do not generalize well to new domains.
+            In contrast, 2D foundation models demonstrate strong generalization and impressive zero-shot abilities, 
+            inspiring us to incorporate these characteristics from 2D models into 3D models.
+            Therefore, we explore the use of image segmentation foundation models to automatically generate training labels for 3D segmentation.
             The resulting model, Segment3D, produces high-quality 3D segmentation masks,
-            improves over existing 3D segmentation models (especially on fine-grained masks), and new training data can be easily added which further boosts the segmentation performance - all without the need for manual data labeling.
+            improves over existing 3D segmentation models (especially on fine-grained masks), 
+            and new training data can be easily added which further boosts the segmentation performance - all without the need for manual data labeling.
           </p>
         </div>
       </div>

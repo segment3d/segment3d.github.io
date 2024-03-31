@@ -377,35 +377,6 @@
           </p>
         </div>
 
-        <h3 class="title is-4">Open-Set Scene Understanding</h3>
-        <img src="./static/images/openmask3d.png"
-                  class="teaser-fig"
-                  alt="teaser-fig."/>
-        <div class="content has-text-justified">
-          <p>
-            Qualitative Results of Adapted OpenMask3D.
-            Given a text prompt (bottom), 
-            OpenMask3D finds the corresponding masks in a given 3D scene (top). 
-            We show the 3D scene reconstruction and an RGB image for better visualization (top left corner).
-            The original OpenMask3D based on Mask3D is unable to recognize any of the above queries, 
-            whether it is a relatively small object or a fine-grained affordance part of an object. 
-            In contrast, our Segment3D adaptation performs well in these cases.
-          </p>
-        </div>
-
-        <h3 class="title is-4">Zero-shot Test on Indoor In-the-Wild Scenes</h3>
-        <img src="./static/images/wild.jpeg"
-                  class="teaser-fig"
-                  alt="teaser-fig."/>
-        <div class="content has-text-justified">
-          <p>
-          From top to bottom, we show the colored input 3D scenes,
-    the segmentation masks predicted by Mask3D and our Segment3D.
-    Segment3D, trained with unsupervised learning, 
-    demonstrates superior generalization compared to Mask3D, 
-    which is trained with fully supervised learning.
-          </p>
-        </div>
 
         <h3 class="title is-4">Zero-shot Test on Outdoor Scenarios</h3>
         <img src="./static/images/outdoor.png"
@@ -413,7 +384,31 @@
                   alt="teaser-fig."/>
         <div class="content has-text-justified">
           <p>
-            Segment3D also exhibits superior generalization performance compared to Mask3D on outdoor scenes.
+            Segment3D also exhibits superior generalization performance compared to Mask3D on unseen outdoor scenes.
+          </p>
+        </div>
+
+        <h3 class="title is-4">Open-Set Scene Understanding</h3>
+        <img src="./static/images/openmask3d.png"
+                  class="teaser-fig"
+                  alt="teaser-fig."/>
+        <div class="content has-text-justified">
+          <p>
+            Given a text prompt (bottom), 
+            OpenMask3D finds the corresponding masks in a given 3D scene (top). 
+            We adapt OpenMask3D and use fine-grained masks from our Segment3D method.
+            We show the 3D scene reconstruction and an RGB image for better visualization (top left corner).
+          </p>
+        </div>
+
+        <!-- <h3 class="title is-4">Open-Set 3D Object Retrieval in a Scene</h3> -->
+        <img src="./static/images/retrieval_in_a_scene.png"
+                  class="teaser-fig"
+                  alt="teaser-fig."/>
+        <div class="content has-text-justified">
+          <p>
+            An Example of Open-Set 3D Object Retrieval in a Scene: 
+            Segment3D can accurately generate fine-grained masks in a class-agnostic manner, allowing us to retrieve small-scale objects of interest.
           </p>
         </div>
 
